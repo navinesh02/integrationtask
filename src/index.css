@@ -35,7 +35,7 @@ input[type="date"]::-webkit-datetime-edit-year-field {
   border: none;
   right: 8px;
   background-color: F1F5F9;
-  font-size: 25px;
+  font-size: 26px;
   background-color: #f1f5f9;
   max-width: 30px;
 }
@@ -43,6 +43,3 @@ input[type="date"]::-webkit-datetime-edit-year-field {
 ::-webkit-scrollbar {
   width: 0 !important;
 }
-/* ::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-} */

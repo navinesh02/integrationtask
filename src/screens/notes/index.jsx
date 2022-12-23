@@ -10,7 +10,6 @@ import {
   Button,
   InputBase,
 } from "@mui/material";
-import moment from "moment";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import React, { useReducer } from "react";
@@ -33,12 +32,24 @@ function reducer(todos, action) {
 }
 
 function newTodo(name) {
-  return { id: Date.now(), name: name, complete: false };
+  return { id: Date.now(), name: name };
 }
 
 export default function Notes() {
-  const date = moment().format("MMM Do");
-  const time = moment().format("LT");
+  const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const d = new Date();
+  const date = weekday[d.getDay()].slice(0, 3) + " " + d.getDate();
+  const am_pm = d.getHours() >= 12 ? "PM" : "AM";
+  const hours = d.getHours() >= 12 ? `${d.getHours() - 12}` : d.getHours();
+  const time = hours + ":" + d.getMinutes() + " " + am_pm;
 
   const [todos, dispatch] = useReducer(reducer, []);
   const [name, setName] = useState({ Text: "", Date: "" });
@@ -47,16 +58,26 @@ export default function Notes() {
   };
 
   function handleSubmit(e) {
-    e.preventDefault();
-    dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
-    setName("");
+    if (name.Date && name.Text === "") {
+      console.log("enter text");
+    } else if (name.Date === "" && name.Text) {
+      console.log("enter date");
+    } else if (name.Date === "" && name.Text === "") {
+      console.log("enter text ..! enter Date..!");
+    } else if (name.Date && name.Text) {
+      console.log("succcesss");
+      e.preventDefault();
+      dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
+      setName("");
+    }
   }
+  console.log(todos);
 
   const handleDelete = (id) => {
     dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: id } });
-
-    console.log("dellee", id);
+    console.log("delete", id);
   };
+
   return (
     <Box>
       <Grid container spacing={2}>
@@ -87,7 +108,6 @@ export default function Notes() {
                   <Typography
                     style={{ fontSize: "28px", fontFamily: "Russo One" }}
                   >
-                    {" "}
                     {time}
                   </Typography>
                 </Box>
@@ -106,6 +126,7 @@ export default function Notes() {
                         placeholder="Notes"
                         fullWidth
                         size="small"
+                        type="text"
                         onChange={(e) => handleChange(e.target.value, "Text")}
                       />
 
