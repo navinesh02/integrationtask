@@ -34,10 +34,11 @@ input[type="date"]::-webkit-datetime-edit-year-field {
   position: absolute;
   border: none;
   right: 8px;
-  background-color: F1F5F9;
   font-size: 26px;
-  background-color: #f1f5f9;
+  background-color: #f1f5f9; 
   max-width: 30px;
+  margin-top: 6px;
+
 }
 
 ::-webkit-scrollbar {

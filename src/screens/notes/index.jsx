@@ -8,11 +8,11 @@ import {
   CardMedia,
   Typography,
   Button,
-  InputBase,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import React, { useReducer } from "react";
+import InputText from "../../components/input.jsx";
 
 export const ACTIONS = {
   ADD_TODO: "add_todo",
@@ -47,25 +47,45 @@ export default function Notes() {
   ];
   const d = new Date();
   const date = weekday[d.getDay()].slice(0, 3) + " " + d.getDate();
-  const am_pm = d.getHours() >= 12 ? "PM" : "AM";
-  const hours = d.getHours() >= 12 ? `${d.getHours() - 12}` : d.getHours();
-  const time = hours + ":" + d.getMinutes() + " " + am_pm;
 
+  const [time, setTime] = React.useState(new Date());
   const [todos, dispatch] = useReducer(reducer, []);
-  const [name, setName] = useState({ Text: "", Date: "" });
+  const [name, setName] = useState({
+    Text: "",
+    Date: "",
+  });
+
   const handleChange = (val, key) => {
     setName({ ...name, [key]: val });
   };
+  const am_pm = time.getHours() >= 12 ? "PM" : "AM";
+  const hours =
+    time.getHours() > 12 ? `${time.getHours() - 12}` : time.getHours();
+  const times = hours + ":" + time.getMinutes() + " " + am_pm;
+  //displaying current time fn
+  React.useEffect(() => {
+    const myInterval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(myInterval);
+    };
+  });
 
   function handleSubmit(e) {
-    if (name.Date && name.Text === "") {
+    if (name.Date && !name.Text) {
       console.log("enter text");
-    } else if (name.Date === "" && name.Text) {
+      document.getElementById("err").innerText = "Text Required ";
+    } else if (!name.Date && name.Text) {
       console.log("enter date");
-    } else if (name.Date === "" && name.Text === "") {
+      document.getElementById("err").innerText = "Date Required";
+    } else if (!name.Date && !name.Text) {
       console.log("enter text ..! enter Date..!");
+      document.getElementById("err").innerText = "Text & Date Required";
     } else if (name.Date && name.Text) {
+      document.getElementById("err").innerText = " ";
       console.log("succcesss");
+
       e.preventDefault();
       dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
       setName("");
@@ -108,7 +128,7 @@ export default function Notes() {
                   <Typography
                     style={{ fontSize: "28px", fontFamily: "Russo One" }}
                   >
-                    {time}
+                    {times}
                   </Typography>
                 </Box>
               </Grid>
@@ -122,28 +142,27 @@ export default function Notes() {
                 <Grid container>
                   <Grid item xs={10} lg={10} md={10} sm={10}>
                     <Box sx={NoteStyle.noteSx}>
-                      <InputBase
+                      <InputText
                         placeholder="Notes"
                         fullWidth
                         size="small"
                         type="text"
                         onChange={(e) => handleChange(e.target.value, "Text")}
+                        value={name.Text ?? ""}
                       />
-
                       <input
                         type="datetime-local"
                         onChange={(e) => handleChange(e.target.value, "Date")}
                         className="datestyle"
+                        value={name.Date ?? ""}
                       />
                     </Box>
+                    <span style={NoteStyle.errorSx} id="err"></span>
                   </Grid>
                   <Grid item xs={2} sm={2} md={2} lg={2}>
                     <Box sx={NoteStyle.addiconSx}>
-                      <Button sx={{ color: "#fff" }}>
-                        <AddIcon
-                          sx={{ color: "#fff" }}
-                          onClick={handleSubmit}
-                        />
+                      <Button sx={{ color: "#fff" }} onClick={handleSubmit}>
+                        <AddIcon sx={{ color: "#fff" }} />
                       </Button>
                     </Box>
                   </Grid>

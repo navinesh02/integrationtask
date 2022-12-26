@@ -9,6 +9,27 @@ import { useState } from "react";
 export default function DataList({ item, fun }) {
   const [complete, setComplete] = useState(false);
 
+  const date = item.name.Date;
+
+  function DateConversion(date) {
+    const today = new Date();
+    let tomorrow = new Date();
+
+    tomorrow.setDate(today.getDate() + 1);
+
+    let input = new Date(date);
+    if (today.getDate() === input.getDate()) {
+      return "Today " + input.toLocaleTimeString();
+    } else if (tomorrow.getDate() === input.getDate()) {
+      return "Tomorrow " + input.toLocaleTimeString();
+    } else {
+      let date = input.toLocaleDateString();
+      let time = input.toLocaleTimeString();
+      return `${date} ${time}`;
+    }
+  }
+  console.log(date, "date");
+
   const completeHandler = () => setComplete(complete ? false : true);
   return (
     <Box>
@@ -17,8 +38,9 @@ export default function DataList({ item, fun }) {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
+        // width={"auto"}
       >
-        <Grid item xs={8}>
+        <Grid item xs={8} sm={8} md={8} lg={8}>
           <Box mt={2} mb={1}>
             <Typography
               sx={DataStyle.noteSx}
@@ -34,22 +56,33 @@ export default function DataList({ item, fun }) {
                 textDecoration: complete ? "line-through" : "none",
               }}
             >
-              {item?.name?.Date}
+              {DateConversion(item?.name?.Date)}
             </Typography>
           </Box>
         </Grid>
 
-        <Grid item xs={4}>
-          <Grid container ml={3}>
-            <Grid item sx={{ color: "#20EEB0 " }} xs={6}>
-              <Checkbox
-                ml={1}
-                onClick={completeHandler}
-                icon={<RadioButtonUncheckedIcon sx={{ color: "#20EEB0 " }} />}
-                checkedIcon={<CheckCircleIcon />}
-              />
+        <Grid item xs={4} sm={4} md={4} lg={4}>
+          <Grid container>
+            <Grid item xs={6} sm={6} md={6} lg={6}>
+              <Box sx={DataStyle.checkboxSx}>
+                <Checkbox
+                  onClick={completeHandler}
+                  // onClick={()=> func(item.id)}
+                  icon={<RadioButtonUncheckedIcon sx={{ color: "#20EEB0 " }} />}
+                  checkedIcon={<CheckCircleIcon />}
+                />
+              </Box>
             </Grid>
-            <Grid item xs={6} mt={1}>
+            <Grid
+              item
+              xs={6}
+              sm={6}
+              md={6}
+              lg={6}
+              mt={1}
+              display={"flex"}
+              justifyContent={"space-around"}
+            >
               <DeleteOutlineIcon
                 sx={{ color: "#FF4545" }}
                 onClick={() => fun(item.id)}

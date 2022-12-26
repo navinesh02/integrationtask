@@ -1,7 +1,7 @@
 export const NoteStyle = {
   cardSx: {
     marginTop: "30px",
-    width: "350px",
+    width: "500px",
     height: "90vh",
   },
   dateSx: {
@@ -9,7 +9,6 @@ export const NoteStyle = {
     marginTop: "65px",
     marginRight: "25px",
     color: "#fff",
-    // fontFamily:"Inter",
   },
   cardcontentSx: {
     margin: "10px 10px 10px 10px",
@@ -20,18 +19,25 @@ export const NoteStyle = {
     display: "flex",
     justifyContent: "space-between",
     position: "relative",
-    padding: "6px",
-    
+    "& .MuiInputBase-root":{
+      height:"44px"
+    }
   },
+
   addiconSx: {
     backgroundColor: "#20EEB0",
     borderRadius: "5px",
-    height: "41px",
-    width: "35px",
+    height: "45px",
     color: "#fff",
-    marginLeft: "15px",
+    marginLeft: "25px",
     justifyContent: "center",
     display: "flex",
     alignItems: "center",
+    width: { xs: "32px", lg: "50px", md: "50px", sm: "40px" },
+  },
+  errorSx: {
+    fontSize: "12px",
+    fontFamily: "Inter",
+    color: "#d32f2f",
   },
 };
