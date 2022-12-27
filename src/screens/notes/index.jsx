@@ -12,7 +12,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import React, { useReducer } from "react";
-import InputText from "../../components/input.jsx";
+import InputText from "../../components/input"
 
 export const ACTIONS = {
   ADD_TODO: "add_todo",
